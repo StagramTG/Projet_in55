@@ -5,7 +5,7 @@
  *
  * Is a Renderable (Need to render itself using OpenGL)
  *
- * Create two subclass :
+ * Create two subclass (We really need these ? I don't think but...):
  * 	- ModelTextured
  * 	- ModelColored
  *
@@ -13,11 +13,11 @@
  */
 
 #include <GL/glew.h>
-#include "../Core/Updatable.h"
+#include "../Core/Renderable.h"
 
 namespace IN
 {
-	class Model: public Updatable
+	class Model: public Renderable
 	{
 	private:
 
@@ -25,6 +25,6 @@ namespace IN
 		Model();
 		~Model();
 
-		virtual void update() override;
+		virtual void render() override;
 	};
 }

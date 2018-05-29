@@ -16,13 +16,15 @@ IN::Scene::~Scene()
 /* Override */
 void IN::Scene::update()
 {
-	mRootNode->update();
+	if (mRootNode)
+		mRootNode->update();
 }
 
 /* Override */
 void IN::Scene::render()
 {
-	mRootNode->render();
+	if (mRootNode)
+		mRootNode->render();
 }
 
 std::string IN::Scene::getName()
