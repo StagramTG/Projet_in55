@@ -44,3 +44,16 @@ void IN::Mesh::create(
 	// Unbind vao
 	glBindVertexArray(0);
 }
+
+void IN::Mesh::render()
+{
+	// Bind vao
+	glBindVertexArray(vao);
+
+	// Shader stuff ?
+
+	// Draw elements
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+
+	glBindVertexArray(0);
+}

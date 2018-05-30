@@ -5,10 +5,11 @@
 
 #include "Vertex.h"
 #include "../Graphics/Texture.h"
+#include "../Core/Renderable.h"
 
 namespace IN
 {
-	class Mesh
+	class Mesh: public Renderable
 	{
 	private:
 		/**
@@ -29,10 +30,15 @@ namespace IN
 		 */
 		GLuint ibo;
 
+		std::vector<Vertex> vertices;
+		std::vector<GLuint> indices;
+		std::vector<Texture> textures;
+
 	public:
 		Mesh();
 		~Mesh();
 
 		void create(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<Texture> textures);
+		virtual void render() override;
 	};
 }
