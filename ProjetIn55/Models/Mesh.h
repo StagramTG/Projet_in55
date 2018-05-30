@@ -17,24 +17,17 @@ namespace IN
 		GLuint vao;
 
 		/**
-		 * Store vbo id for this mesh
+		 * Store vbo id for this mesh, store all data relatives to vertices:
+		 * 	- Positions
+		 * 	- Normals
+		 * 	- Uvs
 		 */
 		GLuint vbo;
 
 		/**
-		 * Store ibo id for this mesh
+		 * Store ibo id for this mesh, indices
 		 */
 		GLuint ibo;
-
-		/**
-		 * Store nbo for this mesh
-		 */
-		GLuint nbo;
-
-		/**
-		 * Store tbo id for this mesh
-		 */
-		GLuint tbo;
 
 	public:
 		Mesh();
