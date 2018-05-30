@@ -32,12 +32,37 @@ namespace IN
 
 		~Window();
 
-		/* Do not handle name conflicts between scenes */
+		/**
+		 * add new scene to use later in the window
+		 * @param  scene the scene to add to the window
+		 * @return       true if the scene have been add
+		 */
 		bool addScene(Scene* scene);
+
+		/**
+		 * give the name of the scene to use in window
+		 * @param  name the name of the scene to use
+		 * @return      true if the scene is found and used
+		 */
 		bool setActiveScene(std::string name);
+
+		/**
+		 * get the scene with the given name
+		 * @param  name the name of the scene to get
+		 * @return      the scene or null of there is no scene with the given name
+		 */
 		Scene* getScene(std::string name);
+
+		/**
+		 * remove the given scene
+		 * @param  scene the scene to remove 
+		 * @return       true if the scene is found and remove
+		 */
 		bool removeScene(Scene* scene);
 
+		/**
+		 * launch the infinite loop for the render and the update of the window and the whole logic
+		 */
 		void run();
 	};
 }
