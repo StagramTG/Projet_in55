@@ -134,7 +134,10 @@
     <ClInclude Include="Core\ShaderProgram.h" />
     <ClInclude Include="Core\Updatable.h" />
     <ClInclude Include="Core\Window.h" />
+    <ClInclude Include="Models\Mesh.h" />
     <ClInclude Include="Models\Model.h" />
+    <ClInclude Include="Models\Texture.h" />
+    <ClInclude Include="Models\Vertex.h" />
     <ClInclude Include="TestScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
