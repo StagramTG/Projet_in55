@@ -14,12 +14,14 @@
 
 #include <GL/glew.h>
 #include "../Core/Renderable.h"
+#include "Mesh.h"
 
 namespace IN
 {
 	class Model: public Renderable
 	{
 	private:
+		std::vector<Mesh> meshes;
 
 	public:
 		Model();

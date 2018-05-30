@@ -1,6 +1,10 @@
 #pragma once
 
 #include <GL/glew.h>
+#include <vector>
+
+#include "Vertex.h"
+#include "../Graphics/Texture.h"
 
 namespace IN
 {
@@ -36,6 +40,6 @@ namespace IN
 		Mesh();
 		~Mesh();
 
-		void create();
-	}
+		void create(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<Texture> textures);
+	};
 }

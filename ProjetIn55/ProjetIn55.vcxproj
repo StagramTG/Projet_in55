@@ -125,7 +125,9 @@
     <ClCompile Include="Core\Scene.cpp" />
     <ClCompile Include="Core\ShaderProgram.cpp" />
     <ClCompile Include="Core\Window.cpp" />
+    <ClCompile Include="Graphics\Texture.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Models\Mesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core\Node.h" />
@@ -136,7 +138,7 @@
     <ClInclude Include="Core\Window.h" />
     <ClInclude Include="Models\Mesh.h" />
     <ClInclude Include="Models\Model.h" />
-    <ClInclude Include="Models\Texture.h" />
+    <ClInclude Include="Graphics\Texture.h" />
     <ClInclude Include="Models\Vertex.h" />
     <ClInclude Include="TestScene.h" />
   </ItemGroup>
