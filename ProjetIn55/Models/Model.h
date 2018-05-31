@@ -15,8 +15,12 @@
 #include <GL/glew.h>
 #include <string>
 #include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
 #include <assimp/scene.h>
 #include <assimp/mesh.h>
+
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
 
 #include "../Core/Renderable.h"
 #include "Mesh.h"
@@ -28,7 +32,11 @@ namespace IN
 	private:
 		std::vector<Mesh> meshes;
 		
-		Mesh createMesh(aiMesh mesh);
+		/**
+		 * Method to create all meshes from the content of the loaded file.
+		 * These Meshes compose the model.
+		 */
+		Mesh createMeshes(aiMesh* mesh, aiMaterial* material);
 
 	public:
 		Model(std::string file);
