@@ -25,5 +25,15 @@ namespace IN
 		 * Method to load texture from file.
 		 */
 		bool loadFromFile(std::string file);
+
+		/**
+		 * Bind the texture to be used
+		 */
+		void bind(GLuint index);
+
+		/**
+		 * Unbind texture
+		 */
+		void unbind();
 	};
 }

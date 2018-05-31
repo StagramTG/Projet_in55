@@ -38,3 +38,14 @@ bool IN::Texture::loadFromFile(std::string file)
 
     return true;
 }
+
+void IN::Texture::bind(int index)
+{
+    glEnableTexture(GL_TEXTURE0 + index);
+    glBindTexture(GL_TEXTURE_2D, id);
+}
+
+void IN::Texture::unbind()
+{
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
