@@ -39,9 +39,9 @@ bool IN::Texture::loadFromFile(std::string file)
     return true;
 }
 
-void IN::Texture::bind(int index)
+void IN::Texture::bind(GLuint index)
 {
-    glEnableTexture(GL_TEXTURE0 + index);
+    glActiveTexture(GL_TEXTURE0 + index);
     glBindTexture(GL_TEXTURE_2D, id);
 }
 
