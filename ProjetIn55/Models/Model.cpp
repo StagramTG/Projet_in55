@@ -35,6 +35,7 @@ IN::Mesh IN::Model::createMeshes(aiMesh* mesh, aiMaterial* material)
 {
     std::vector<Vertex> vertices;
     std::vector<GLuint> indices;
+    std::vector<Texture> textures;
 
     // Extract data in vector of Vertex
     for(size_t i = 0; i < mesh->mNumVertices; ++i)
@@ -69,13 +70,29 @@ IN::Mesh IN::Model::createMeshes(aiMesh* mesh, aiMaterial* material)
     }
 
     // Extract textures
-    if(material->GetTextureCount(aiTextureType_DIFFUSE) > 0)
+    int textureCount = material->GetTextureCount(aiTextureType_DIFFUSE); 
+    if(textureCount > 0)
     {
-        
+        for(size_t t = 0; t < textureCount; ++t)
+        {
+            Texture texture;
+
+            aiString texturePath;
+            material->GetTexture(aiTextureType_DIFFUSE, t, &texturePath);
+
+            if(!texture.loadFromFile(texturePath.C_Str()))
+            {
+                // TODO: Put log in case of error
+            }
+            else
+            {
+                textures.push_back(texture);
+            }
+        }
     }
 
     // Create the mesh
     Mesh newMesh;
-    newMesh.create(vertices, indices, std::vector<Texture>());
+    newMesh.create(vertices, indices, textures);
     return newMesh;
 }
