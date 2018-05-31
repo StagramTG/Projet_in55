@@ -2,12 +2,19 @@
 
 IN::Mesh::Mesh()
 {
-
+	vao = 0;
+	vbo = 0;
 }
 
 IN::Mesh::~Mesh()
 {
+	// Clean up VBO
+	if(vbo != 0)
+		glDeleteBuffers(1, &vbo);
 
+	// Clean up VAO
+	if(vao != 0)
+		glDeleteVertexArrays(1, &vao);
 }
 
 void IN::Mesh::create(

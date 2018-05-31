@@ -13,6 +13,11 @@
  */
 
 #include <GL/glew.h>
+#include <string>
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/mesh.h>
+
 #include "../Core/Renderable.h"
 #include "Mesh.h"
 
@@ -22,9 +27,11 @@ namespace IN
 	{
 	private:
 		std::vector<Mesh> meshes;
+		
+		Mesh createMesh(aiMesh mesh);
 
 	public:
-		Model();
+		Model(std::string file);
 		~Model();
 
 		virtual void render() override;
