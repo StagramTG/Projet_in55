@@ -71,10 +71,11 @@ IN::Mesh IN::Model::createMeshes(aiMesh* mesh, aiMaterial* material)
     // Extract textures
     if(material->GetTextureCount(aiTextureType_DIFFUSE) > 0)
     {
-
+        
     }
 
     // Create the mesh
     Mesh newMesh;
     newMesh.create(vertices, indices, std::vector<Texture>());
+    return newMesh;
 }
