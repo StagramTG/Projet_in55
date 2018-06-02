@@ -40,8 +40,11 @@ namespace IN
 		Mesh createMeshes(aiMesh* mesh, aiMaterial* material);
 
 	public:
+		Model();
 		Model(std::string file);
 		~Model();
+
+		bool create(std::string file);
 
 		virtual void render() override;
 	};

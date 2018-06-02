@@ -1,6 +1,22 @@
 #include "Model.h"
 
+IN::Model::Model()
+{
+
+}
+
 IN::Model::Model(std::string file)
+{
+    // Create the model from file
+    create(file);
+}
+
+IN::Model::~Model()
+{
+
+}
+
+bool IN::Model::create(std::string file)
 {
     // Load Model file with assimp
     Assimp::Importer importer;
@@ -19,11 +35,6 @@ IN::Model::Model(std::string file)
 
     // Free memory
     importer.FreeScene();
-}
-
-IN::Model::~Model()
-{
-
 }
 
 void IN::Model::render()
