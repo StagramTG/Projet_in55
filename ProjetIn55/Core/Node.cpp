@@ -20,11 +20,11 @@ namespace IN
 		}
 	}
 
-	void Node::render()
+	void Node::render(ShaderProgram* shader)
 	{
 		for (auto child : mChildren)
 		{
-			child->render();
+			child->render(shader);
 		}
 	}
 

@@ -52,7 +52,7 @@ void IN::Mesh::create(
 	glBindVertexArray(0);
 }
 
-void IN::Mesh::render()
+void IN::Mesh::render(ShaderProgram* shader)
 {
 	// Bind vao
 	glBindVertexArray(vao);

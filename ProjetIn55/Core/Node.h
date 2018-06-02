@@ -20,7 +20,7 @@ namespace IN
 		~Node();
 
 		virtual void update() override;
-		virtual void render() override;
+		virtual void render(ShaderProgram* shader) override;
 
 		bool addChild(Node* child);
 		bool removeChild(Node* child);

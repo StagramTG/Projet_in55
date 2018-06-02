@@ -35,9 +35,10 @@ bool IN::Model::create(std::string file)
 
     // Free memory
     importer.FreeScene();
+	return true;
 }
 
-void IN::Model::render()
+void IN::Model::render(ShaderProgram* shader)
 {
 
 }
@@ -81,7 +82,7 @@ IN::Mesh IN::Model::createMeshes(aiMesh* mesh, aiMaterial* material)
     }
 
     // Extract textures
-    int textureCount = material->GetTextureCount(aiTextureType_DIFFUSE); 
+    size_t textureCount = material->GetTextureCount(aiTextureType_DIFFUSE); 
     if(textureCount > 0)
     {
         for(size_t t = 0; t < textureCount; ++t)

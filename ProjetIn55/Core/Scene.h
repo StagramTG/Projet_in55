@@ -17,7 +17,7 @@ namespace IN
 		~Scene();
 
 		virtual void update() override;
-		virtual void render() override;
+		virtual void render(ShaderProgram* shader) override;
 
 		std::string getName();
 	};

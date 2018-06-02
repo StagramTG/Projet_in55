@@ -39,6 +39,6 @@ namespace IN
 		~Mesh();
 
 		void create(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<Texture> textures);
-		virtual void render() override;
+		virtual void render(ShaderProgram* shader) override;
 	};
 }

@@ -46,6 +46,6 @@ namespace IN
 
 		bool create(std::string file);
 
-		virtual void render() override;
+		virtual void render(ShaderProgram* shader) override;
 	};
 }

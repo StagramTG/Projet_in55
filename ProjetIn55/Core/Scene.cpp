@@ -21,10 +21,10 @@ void IN::Scene::update()
 }
 
 /* Override */
-void IN::Scene::render()
+void IN::Scene::render(ShaderProgram* shader)
 {
 	if (mRootNode)
-		mRootNode->render();
+		mRootNode->render(shader);
 }
 
 std::string IN::Scene::getName()
