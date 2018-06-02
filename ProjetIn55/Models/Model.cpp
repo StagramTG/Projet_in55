@@ -13,7 +13,7 @@ IN::Model::Model(std::string file)
 
 IN::Model::~Model()
 {
-
+    meshes.clear();
 }
 
 bool IN::Model::create(std::string file)
@@ -40,7 +40,10 @@ bool IN::Model::create(std::string file)
 
 void IN::Model::render(ShaderProgram* shader)
 {
-
+    for(Mesh mesh : meshes)
+    {
+        mesh.render(shader);
+    }
 }
 
 IN::Mesh IN::Model::createMeshes(aiMesh* mesh, aiMaterial* material)
