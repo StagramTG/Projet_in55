@@ -11,8 +11,11 @@ namespace IN
         Model mModel;
 
     public:
+        Character();
         Character(std::string name, std::string modelFile);
         ~Character();
+
+        bool create(std::string name, std::string modelFile);
 
         virtual void update() override;
 		virtual void render(ShaderProgram* shader) override;
