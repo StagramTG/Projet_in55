@@ -18,7 +18,7 @@ public:
 		shader.init("Assets/Shaders/vertex.glsl", "Assets/Shaders/fragment.glsl");
 
 		/* Load character model and setup */
-		character.create("Minion", "Assets/Models/Minion.dae");
+		character.create("Minion", "Assets/Models/test.dae");
 	}
 
 	virtual void update() override
