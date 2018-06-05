@@ -43,6 +43,14 @@ void IN::Mesh::create(
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
 
+	// Pointer for vertices weights
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(3, 4, GL_FLOAT, GL_TRUE, sizeof(Vertex), (void*)offsetof(Vertex, weight));
+
+	// Pointer for vertices ids
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(4, 4, GL_INT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, id));
+
 	// Create IBO + bind + push data
 	glGenBuffers(1, &ibo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
@@ -58,9 +66,15 @@ void IN::Mesh::render(ShaderProgram* shader)
 	glBindVertexArray(vao);
 
 	// Shader stuff ?
+	glUniformMatrix4fv(shader->getUniformLocation("gBones"), loaderSkeleton.m_boneMats.size(), GL_FALSE, glm::value_ptr(loaderSkeleton.m_boneMats[0]));
 
 	// Draw elements
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 
 	glBindVertexArray(0);
+}
+
+IN::Skeleton* IN::Mesh::GetLoaderSkeleton()
+{
+	return &loaderSkeleton;
 }

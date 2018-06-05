@@ -26,18 +26,33 @@
 #include "../Core/Renderable.h"
 #include "Mesh.h"
 
+#include "../Core/Bone.h"
+
 namespace IN
 {
 	class Model: public Renderable
 	{
 	private:
 		std::vector<Mesh> meshes;
+
+		std::vector<aiNode*> ai_nodes;
+		std::vector<aiNodeAnim*> ai_nodes_anim;
+
+		aiMatrix4x4 m_globalInverseTransform;
+
+		std::vector<Bone> bones;
+
+		bool mAnim;
+		Skeleton mSkeleton;
 		
 		/**
 		 * Method to create all meshes from the content of the loaded file.
 		 * These Meshes compose the model.
 		 */
 		Mesh createMeshes(aiMesh* mesh, aiMaterial* material);
+
+		void recursiveNodeProcess(aiNode* node);
+		void AnimNodeProcess(const aiScene* scene);
 
 	public:
 		Model();
@@ -47,5 +62,17 @@ namespace IN
 		bool create(std::string file);
 
 		virtual void render(ShaderProgram* shader) override;
+
+		Bone* FindBone(std::string name);
+
+		aiNode* FindAiNode(std::string name);
+
+		aiNodeAnim* FindAiNodeAnim(std::string name);
+
+		int FindBoneIDByName(std::string name);
+
+		void BoneProcess(const aiScene* scene);
+
+		void UpdateSkeleton();
 	};
 }

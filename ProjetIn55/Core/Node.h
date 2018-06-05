@@ -16,6 +16,7 @@ namespace IN
 		std::vector<Node*> mChildren;
 
 	public:
+		Node();
 		Node(std::string name);
 		~Node();
 

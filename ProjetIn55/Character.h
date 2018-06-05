@@ -1,7 +1,10 @@
+#ifndef CHARACTER_H
+#define CHARACTER_H
 #pragma once
 
 #include "./Core/Node.h"
 #include "./Models/Model.h"
+#include "./Core/Bone.h"
 
 namespace IN
 {
@@ -21,3 +24,4 @@ namespace IN
 		virtual void render(ShaderProgram* shader) override;
     };
 }
+#endif

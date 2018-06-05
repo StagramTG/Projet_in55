@@ -100,6 +100,13 @@ namespace IN
 				mCurrentScene->render(nullptr);
 
 			glfwSwapBuffers(mWindow);
+
+			/*float nowTime = glfwGetTime();
+
+			if (nowTime > lastTime) {
+				GLOBALS::deltaTime = (nowTime - lastTime) / 1000;
+				lastTime = nowTime;
+			}*/
 		}
 
 		clear();
@@ -132,6 +139,8 @@ namespace IN
 
 		glfwMakeContextCurrent(mWindow);
 		glfwSwapInterval(1);
+
+		//GLOBALS::deltaTime = 0.0;
 
 		return true;
 	}

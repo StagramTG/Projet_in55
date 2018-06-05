@@ -2,6 +2,11 @@
 
 namespace IN 
 {
+	Node::Node()
+	{
+		mName = "";
+	}
+	
 	Node::Node(std::string name)
 	{
 		mName = name;

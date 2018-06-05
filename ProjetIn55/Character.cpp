@@ -17,7 +17,7 @@ IN::Character::~Character()
 
 bool IN::Character::create(std::string name, std::string modelFile)
 {
-    mModel.create(modelFile);
+    return mModel.create(modelFile);
 }
 
 void IN::Character::update()

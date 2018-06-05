@@ -1,9 +1,12 @@
+#ifndef WINDOW_H
+#define WINDOW_H
 #pragma once
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include "Scene.h"
+//#include "../Globals.h"
 
 namespace IN
 {
@@ -12,11 +15,14 @@ namespace IN
 			- Collection de scenes
 			- Scene courante (active)
 	*/
+
 	class Window
 	{
 	private:
 		GLFWwindow * mWindow;
 
+		float lastTime = 0;
+		
 		bool initContext();
 		bool initWindow(int w, int h, const char* t);
 		void clear();
@@ -66,3 +72,4 @@ namespace IN
 		void run();
 	};
 }
+#endif

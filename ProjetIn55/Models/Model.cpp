@@ -1,5 +1,7 @@
 #include "Model.h"
 
+int WEIGHTS_PER_VERTEX = 4;
+
 IN::Model::Model()
 {
 
@@ -7,107 +9,248 @@ IN::Model::Model()
 
 IN::Model::Model(std::string file)
 {
-    // Create the model from file
-    create(file);
+	// Create the model from file
+	create(file);
 }
 
 IN::Model::~Model()
 {
-    meshes.clear();
+	meshes.clear();
 }
 
 bool IN::Model::create(std::string file)
 {
-    // Load Model file with assimp
-    Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(file, 
-        aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
-    
-    // Extract all meshes and build them
-    for(size_t i = 0; i < scene->mNumMeshes; ++i)
-    {
+	// Load Model file with assimp
+	Assimp::Importer importer;
+	const aiScene* scene = importer.ReadFile(file,
+		aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
+
+	recursiveNodeProcess(scene->mRootNode);
+	AnimNodeProcess(scene);
+	m_globalInverseTransform = scene->mRootNode->mTransformation.Inverse();
+
+	// Extract all meshes and build them
+	for (size_t i = 0; i < scene->mNumMeshes; ++i)
+	{
 		aiMaterial* material = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
 
-        // Create mesh and push in vector
-        Mesh m = createMeshes(scene->mMeshes[i], material);
-        meshes.push_back(m);
-    }
+		// Create mesh and push in vector
+		Mesh m = createMeshes(scene->mMeshes[i], material);
+		meshes.push_back(m);
+	}
 
-    // Free memory
-    importer.FreeScene();
+	// Extract bones
+	BoneProcess(scene);
+
+	if (meshes.size() != 0)
+	{
+		mSkeleton = *meshes.at(0).GetLoaderSkeleton();
+	}
+
+	// Free memory
+	importer.FreeScene();
 	return true;
 }
 
 void IN::Model::render(ShaderProgram* shader)
 {
-    for(Mesh mesh : meshes)
-    {
-        mesh.render(shader);
-    }
+	UpdateSkeleton();
+	for (Mesh mesh : meshes)
+	{
+		mesh.render(shader);
+	}
 }
 
 IN::Mesh IN::Model::createMeshes(aiMesh* mesh, aiMaterial* material)
 {
-    std::vector<Vertex> vertices;
-    std::vector<GLuint> indices;
-    std::vector<Texture> textures;
+	std::vector<Vertex> vertices;
+	std::vector<GLuint> indices;
+	std::vector<Texture> textures;
 
-    // Extract data in vector of Vertex
-    for(size_t i = 0; i < mesh->mNumVertices; ++i)
-    {
-        Vertex vertex;
+	// Extract data in vector of Vertex
+	for (size_t i = 0; i < mesh->mNumVertices; ++i)
+	{
+		Vertex vertex;
 
-        aiVector3D pos = mesh->mVertices[i];
-        vertex.position = glm::vec3(pos.x, pos.y, pos.z);
+		aiVector3D pos = mesh->mVertices[i];
+		vertex.position = glm::vec3(pos.x, pos.y, pos.z);
 
-        if(mesh->HasNormals())
-        {
-            aiVector3D nor = mesh->mNormals[i];
-            vertex.normal = glm::vec3(nor.x, nor.y, nor.z);
-        }
+		if (mesh->HasNormals())
+		{
+			aiVector3D nor = mesh->mNormals[i];
+			vertex.normal = glm::vec3(nor.x, nor.y, nor.z);
+		}
 
-        if(mesh->HasTextureCoords(0))
-        {
-            aiVector3D tex = mesh->mTextureCoords[0][i];
-            vertex.uv = glm::vec2(tex.x, tex.y);
-        }
+		if (mesh->HasTextureCoords(0))
+		{
+			aiVector3D tex = mesh->mTextureCoords[0][i];
+			vertex.uv = glm::vec2(tex.x, tex.y);
+		}
 
-        // Push the vertex in vector
-        vertices.push_back(vertex);
-    }
+		// Push the vertex in vector
+		vertices.push_back(vertex);
+	}
 
-    // Extract indices
-    for(size_t y = 0; y < mesh->mNumFaces; ++y)
-    {
-        indices.push_back(mesh->mFaces[y].mIndices[0]);
-        indices.push_back(mesh->mFaces[y].mIndices[1]);
-        indices.push_back(mesh->mFaces[y].mIndices[2]);
-    }
+	// Extract indices
+	for (size_t y = 0; y < mesh->mNumFaces; ++y)
+	{
+		indices.push_back(mesh->mFaces[y].mIndices[0]);
+		indices.push_back(mesh->mFaces[y].mIndices[1]);
+		indices.push_back(mesh->mFaces[y].mIndices[2]);
+	}
 
-    // Extract textures
-    size_t textureCount = material->GetTextureCount(aiTextureType_DIFFUSE); 
-    if(textureCount > 0)
-    {
-        for(size_t t = 0; t < textureCount; ++t)
-        {
-            Texture texture;
+	// Extract textures
+	size_t textureCount = material->GetTextureCount(aiTextureType_DIFFUSE);
+	if (textureCount > 0)
+	{
+		for (size_t t = 0; t < textureCount; ++t)
+		{
+			Texture texture;
 
-            aiString texturePath;
-            material->GetTexture(aiTextureType_DIFFUSE, t, &texturePath);
+			aiString texturePath;
+			material->GetTexture(aiTextureType_DIFFUSE, t, &texturePath);
 
-            if(!texture.loadFromFile(texturePath.C_Str()))
-            {
-                // TODO: Put log in case of error
-            }
-            else
-            {
-                textures.push_back(texture);
-            }
-        }
-    }
+			if (!texture.loadFromFile(texturePath.C_Str()))
+			{
+				// TODO: Put log in case of error
+			}
+			else
+			{
+				textures.push_back(texture);
+			}
+		}
+	}
 
-    // Create the mesh
-    Mesh newMesh;
-    newMesh.create(vertices, indices, textures);
-    return newMesh;
+	// Extract Bone IDs and Weights
+	int boneArraysSize = mesh->mNumVertices*WEIGHTS_PER_VERTEX;
+	std::vector<int> boneIDs;
+	boneIDs.resize(boneArraysSize);
+	std::vector<float> boneWeights;
+	boneWeights.resize(boneArraysSize);
+	for (int i = 0; i < (signed)mesh->mNumBones; ++i)
+	{
+		aiBone* aiBone = mesh->mBones[i];
+		for (int j = 0; j < (signed)aiBone->mNumWeights; j++)
+		{
+			aiVertexWeight weight = aiBone->mWeights[j];
+			unsigned int vertexStart = weight.mVertexId * WEIGHTS_PER_VERTEX;
+			for (int k = 0; k < WEIGHTS_PER_VERTEX; k++)
+			{
+				if (boneWeights.at(vertexStart + k) == 0)
+				{
+					boneWeights.at(vertexStart + k) = weight.mWeight;
+					boneIDs.at(vertexStart + k) = i;
+					vertices.at(weight.mVertexId).id[k] = i;
+					vertices.at(weight.mVertexId).weight[k] = weight.mWeight;
+					break;
+				}
+			}
+		}
+	}
+
+
+	// Create the mesh
+	Mesh newMesh;
+	newMesh.create(vertices, indices, textures);
+	return newMesh;
+}
+
+void IN::Model::recursiveNodeProcess(aiNode* node)
+{
+	ai_nodes.push_back(node);
+
+	for (int i = 0; i < (signed)node->mNumChildren; ++i)
+	{
+		recursiveNodeProcess(node->mChildren[i]);
+	}
+}
+
+void IN::Model::AnimNodeProcess(const aiScene* scene)
+{
+	if (scene->mNumAnimations == 0)
+		return;
+
+	for (int i = 0; i < (signed)scene->mAnimations[0]->mNumChannels; ++i)
+	{
+		ai_nodes_anim.push_back(scene->mAnimations[0]->mChannels[i]);
+	}
+}
+
+IN::Bone* IN::Model::FindBone(std::string name)
+{
+	for (int i = 0; i < (signed)bones.size(); ++i)
+	{
+		if (bones.at(i).GetName() == name)
+			return &bones.at(i);
+	}
+	return nullptr;
+}
+
+aiNode* IN::Model::FindAiNode(std::string name)
+{
+	for (int i = 0; i < (signed)ai_nodes.size(); ++i)
+	{
+		if (ai_nodes.at(i)->mName.data == name)
+			return ai_nodes.at(i);
+	}
+	return nullptr;
+}
+
+aiNodeAnim* IN::Model::FindAiNodeAnim(std::string name)
+{
+	for (int i = 0; i < (signed)ai_nodes_anim.size(); ++i)
+	{
+		if (ai_nodes_anim.at(i)->mNodeName.data == name)
+			return ai_nodes_anim.at(i);
+	}
+	return nullptr;
+}
+
+int IN::Model::FindBoneIDByName(std::string name)
+{
+	for (int i = 0; i < (signed)bones.size(); ++i)
+	{
+		if (bones.at(i).GetName() == name)
+			return i;
+	}
+	return -1;
+}
+
+void IN::Model::BoneProcess(const aiScene* scene)
+{
+	for (int i = 0; i < (signed)scene->mNumMeshes; ++i)
+	{
+		for (int j = 0; j <(signed)scene->mMeshes[i]->mNumBones; j++)
+		{
+			std::string b_name = scene->mMeshes[i]->mBones[j]->mName.data;
+			glm::mat4 b_mat = glm::transpose(AiToGLMMat4(scene->mMeshes[i]->mBones[j]->mOffsetMatrix));
+
+			Bone bone(&meshes.at(i), i, b_name, b_mat);
+
+			bone.SetNode(FindAiNode(b_name));
+			bone.SetAnimNode(FindAiNodeAnim(b_name));
+
+			bones.push_back(bone);
+		}
+	}
+
+	for (int i = 0; i < (signed)bones.size(); ++i)
+	{
+		std::string b_name = bones.at(i).GetName();
+		std::string parent_name = FindAiNode(b_name)->mParent->mName.data;
+
+		Bone* p_bone = FindBone(parent_name);
+
+		bones.at(i).SetParentBone(p_bone);
+	}
+
+	if (meshes.size() > 0)
+	{
+		meshes.at(0).GetLoaderSkeleton()->Init(bones, m_globalInverseTransform);
+	}
+}
+
+void IN::Model::UpdateSkeleton()
+{
+	mSkeleton.Update();
 }

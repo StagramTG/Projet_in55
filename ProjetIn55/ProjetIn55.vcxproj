@@ -122,6 +122,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Character.cpp" />
+    <ClCompile Include="Core\Bone.cpp" />
     <ClCompile Include="Core\Node.cpp" />
     <ClCompile Include="Core\Scene.cpp" />
     <ClCompile Include="Core\ShaderProgram.cpp" />
@@ -133,12 +134,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Character.h" />
+    <ClInclude Include="Core\Animation.h" />
+    <ClInclude Include="Core\Bone.h" />
     <ClInclude Include="Core\Node.h" />
     <ClInclude Include="Core\Renderable.h" />
     <ClInclude Include="Core\Scene.h" />
     <ClInclude Include="Core\ShaderProgram.h" />
     <ClInclude Include="Core\Updatable.h" />
     <ClInclude Include="Core\Window.h" />
+    <ClInclude Include="Globals.h" />
     <ClInclude Include="Models\Mesh.h" />
     <ClInclude Include="Models\Model.h" />
     <ClInclude Include="Graphics\Texture.h" />
