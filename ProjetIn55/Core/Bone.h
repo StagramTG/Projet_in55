@@ -9,7 +9,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Animation.h"
-//#include "../Globals.h"
+#include "../Globals.h"
 
 #include <string>
 #include <vector>
@@ -166,7 +166,7 @@ namespace IN
 
 		Bone* FindBone(std::string name)
 		{
-			for (int i = 0; i < (signed)m_bones.size(); i++)
+			for (int i = 0; i < (signed)m_bones.size(); ++i)
 			{
 				if (strcmp(m_bones.at(i).GetName().c_str(), name.c_str()) == 0)
 				{
@@ -223,7 +223,7 @@ namespace IN
 
 			m_boneMats.clear();
 
-			for (int i = 0; i < 100; i++)
+			for (int i = 0; i < 100; ++i)
 			{
 				if (i >(signed)m_bones.size() - 1)
 				{
@@ -244,7 +244,7 @@ namespace IN
 			if (!anim_play)
 				return;
 			
-			//time += GLOBALS::deltaTime;
+			time += GLOBALS::deltaTime;
 
 			if (time < start_time)
 				time = start_time;

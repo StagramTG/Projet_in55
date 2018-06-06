@@ -103,7 +103,7 @@ unsigned int IN::Bone::FindRotation(float time)
 	for (unsigned int i = 0; i < animNode->mNumRotationKeys - 1; ++i)
 	{
 		if (time < (float)animNode->mRotationKeys[i + 1].mTime)
-			return i;
+			return i; 
 	}
 	return 0;
 }

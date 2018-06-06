@@ -4,7 +4,7 @@
 
 #include "./Core/Node.h"
 #include "./Models/Model.h"
-#include "./Core/Bone.h"
+#include "./Core/Animation.h"
 
 namespace IN
 {
@@ -22,6 +22,10 @@ namespace IN
 
         virtual void update() override;
 		virtual void render(ShaderProgram* shader) override;
+
+		void AddAnimation(IN::Animation);
+
+		void Move(int input);
     };
 }
 #endif

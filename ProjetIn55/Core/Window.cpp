@@ -87,11 +87,38 @@ namespace IN
 		return false;
 	}
 
+	void IN::Window::ButtonPressed(GLFWwindow* window, int key, int scancode, int action, int mods)
+	{
+		
+		if (action == GLFW_PRESS)
+		{
+			if (key == GLFW_KEY_ESCAPE)
+			{
+				glfwDestroyWindow(mWindow);
+				glfwTerminate();
+			}
+			else
+			{
+				mCurrentScene->move_camera(key);
+				mCurrentScene->move_character(key);
+			}
+		}				
+	}
+
+	void IN::Window::CursorMoved(GLFWwindow* window, double xpos, double ypos)
+	{
+		std::vector<double> currentMousePosition = std::vector<double>({ xpos, ypos });
+		std::vector<double> deltaPosition = std::vector<double>({ xpos - lastMousePosition.at(0), ypos - lastMousePosition.at(1) });
+		lastMousePosition = currentMousePosition;
+		mCurrentScene->move_camera(deltaPosition.at(0), deltaPosition.at(1));
+	}
+
 	void Window::run()
 	{
 		while (!glfwWindowShouldClose(mWindow))
 		{
 			glfwPollEvents();
+
 			if (mCurrentScene)
 				mCurrentScene->update();
 
@@ -101,17 +128,16 @@ namespace IN
 
 			glfwSwapBuffers(mWindow);
 
-			/*float nowTime = glfwGetTime();
-
+			float nowTime = (float)glfwGetTime();
 			if (nowTime > lastTime) {
 				GLOBALS::deltaTime = (nowTime - lastTime) / 1000;
 				lastTime = nowTime;
-			}*/
+			}
 		}
 
 		clear();
 	}
-	
+
 	bool IN::Window::initContext()
 	{
 		glewExperimental = GL_TRUE;
@@ -140,7 +166,22 @@ namespace IN
 		glfwMakeContextCurrent(mWindow);
 		glfwSwapInterval(1);
 
-		//GLOBALS::deltaTime = 0.0;
+
+		glfwSetWindowUserPointer(mWindow, this);
+
+		auto ButtonEvent = [](GLFWwindow* window, int key, int scancode, int action, int mods)
+		{
+			static_cast<Window*>(glfwGetWindowUserPointer(window))->ButtonPressed(window, key, scancode, action, mods);
+		};
+		glfwSetKeyCallback(mWindow, ButtonEvent);
+
+		auto MouseEvent = [](GLFWwindow* window, double x, double y)
+		{
+			static_cast<Window*>(glfwGetWindowUserPointer(window))->CursorMoved(window, x, y);
+		};
+		glfwSetCursorPosCallback(mWindow, MouseEvent);
+
+		lastMousePosition = std::vector<double>({ (double)w / 2, (double)h / 2 });
 
 		return true;
 	}
@@ -150,4 +191,5 @@ namespace IN
 		glfwDestroyWindow(mWindow);
 		glfwTerminate();
 	}
+
 }

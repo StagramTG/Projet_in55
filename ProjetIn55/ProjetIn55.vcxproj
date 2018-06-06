@@ -123,10 +123,12 @@
   <ItemGroup>
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Core\Bone.cpp" />
+    <ClCompile Include="Core\Camera.cpp" />
     <ClCompile Include="Core\Node.cpp" />
     <ClCompile Include="Core\Scene.cpp" />
     <ClCompile Include="Core\ShaderProgram.cpp" />
     <ClCompile Include="Core\Window.cpp" />
+    <ClCompile Include="Globals.cpp" />
     <ClCompile Include="Graphics\Texture.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Models\Mesh.cpp" />
@@ -136,6 +138,8 @@
     <ClInclude Include="Character.h" />
     <ClInclude Include="Core\Animation.h" />
     <ClInclude Include="Core\Bone.h" />
+    <ClInclude Include="Core\Camera.h" />
+    <ClInclude Include="Core\CameraSettings.h" />
     <ClInclude Include="Core\Node.h" />
     <ClInclude Include="Core\Renderable.h" />
     <ClInclude Include="Core\Scene.h" />

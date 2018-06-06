@@ -4,9 +4,10 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <vector>
 
 #include "Scene.h"
-//#include "../Globals.h"
+#include "../Globals.h"
 
 namespace IN
 {
@@ -31,6 +32,8 @@ namespace IN
 		std::vector<Scene*> mScenes;
 		/* Scene that is currently active in application */
 		Scene* mCurrentScene;
+
+		std::vector<double> lastMousePosition{0,0};
 
 	public:
 		Window();
@@ -70,6 +73,9 @@ namespace IN
 		 * launch the infinite loop for the render and the update of the window and the whole logic
 		 */
 		void run();
+
+		void ButtonPressed(GLFWwindow* window, int key, int scancode, int action, int mods);
+		void CursorMoved(GLFWwindow* window, double xpos, double ypos);
 	};
 }
 #endif

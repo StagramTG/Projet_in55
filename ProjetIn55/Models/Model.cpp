@@ -4,7 +4,6 @@ int WEIGHTS_PER_VERTEX = 4;
 
 IN::Model::Model()
 {
-
 }
 
 IN::Model::Model(std::string file)
@@ -47,8 +46,9 @@ bool IN::Model::create(std::string file)
 		mSkeleton = *meshes.at(0).GetLoaderSkeleton();
 	}
 
+	mScene = scene;
 	// Free memory
-	importer.FreeScene();
+	//importer.FreeScene();
 	return true;
 }
 
@@ -130,7 +130,7 @@ IN::Mesh IN::Model::createMeshes(aiMesh* mesh, aiMaterial* material)
 	for (int i = 0; i < (signed)mesh->mNumBones; ++i)
 	{
 		aiBone* aiBone = mesh->mBones[i];
-		for (int j = 0; j < (signed)aiBone->mNumWeights; j++)
+		for (int j = 0; j < (signed)aiBone->mNumWeights; ++j)
 		{
 			aiVertexWeight weight = aiBone->mWeights[j];
 			unsigned int vertexStart = weight.mVertexId * WEIGHTS_PER_VERTEX;
@@ -220,7 +220,7 @@ void IN::Model::BoneProcess(const aiScene* scene)
 {
 	for (int i = 0; i < (signed)scene->mNumMeshes; ++i)
 	{
-		for (int j = 0; j <(signed)scene->mMeshes[i]->mNumBones; j++)
+		for (int j = 0; j <(signed)scene->mMeshes[i]->mNumBones; ++j)
 		{
 			std::string b_name = scene->mMeshes[i]->mBones[j]->mName.data;
 			glm::mat4 b_mat = glm::transpose(AiToGLMMat4(scene->mMeshes[i]->mBones[j]->mOffsetMatrix));
@@ -253,4 +253,43 @@ void IN::Model::BoneProcess(const aiScene* scene)
 void IN::Model::UpdateSkeleton()
 {
 	mSkeleton.Update();
+}
+
+void IN::Model::AddAnimation(Animation& in_anim)
+{
+	animations.push_back(in_anim);
+}
+
+IN::Animation* IN::Model::FindAnimation(std::string anim_to_find)
+{
+	for (int i = 0; i < (signed)animations.size(); ++i)
+	{
+		if (animations.at(i).GetName() == anim_to_find)
+		{
+			return &animations.at(i);
+		}
+	}
+	return nullptr;
+}
+
+void IN::Model::PlayAnimation(Animation& anim, bool loop, bool reset_to_start)
+{
+	mSkeleton.PlayAnimation(anim, loop, reset_to_start);
+}
+
+void IN::Model::PlayAnimation(std::string name_anim)
+{
+	for (Animation anim : animations)
+	{
+		if (anim.GetName() == name_anim)
+		{
+			mSkeleton.PlayAnimation(anim, false, false);
+			break;
+		}
+	}
+}
+
+void IN::Model::StopAnimating()
+{
+	mSkeleton.StopAnimating();
 }

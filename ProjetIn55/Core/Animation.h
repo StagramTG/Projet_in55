@@ -56,6 +56,11 @@ namespace IN
 		{
 			return end_time;
 		}
+
+		std::string GetName()
+		{
+			return name;
+		}
 	};
 }
 #endif

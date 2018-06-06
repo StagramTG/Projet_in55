@@ -26,5 +26,9 @@ namespace IN
 		bool addChild(Node* child);
 		bool removeChild(Node* child);
 		Node* getChild(std::string name);
+
+		virtual void move_camera(int input);
+		virtual void move_camera(int x, int y);
+		virtual void move_character(int input);
 	};
 }

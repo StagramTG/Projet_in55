@@ -72,4 +72,28 @@ namespace IN
 
 		return nullptr;
 	}
+
+	void Node::move_camera(int input)
+	{
+		for (Node* child : mChildren)
+		{
+			child->move_camera(input);
+		}
+	}
+
+	void Node::move_camera(int x, int y)
+	{
+		for (Node* child : mChildren)
+		{
+			child->move_camera(x, y);
+		}
+	}
+
+	void Node::move_character(int input)
+	{
+		for (Node* child : mChildren)
+		{
+			child->move_character(input);
+		}
+	}
 }

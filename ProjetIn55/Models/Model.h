@@ -35,6 +35,8 @@ namespace IN
 	private:
 		std::vector<Mesh> meshes;
 
+		const aiScene* mScene;
+
 		std::vector<aiNode*> ai_nodes;
 		std::vector<aiNodeAnim*> ai_nodes_anim;
 
@@ -44,6 +46,8 @@ namespace IN
 
 		bool mAnim;
 		Skeleton mSkeleton;
+
+		std::vector<Animation> animations;
 		
 		/**
 		 * Method to create all meshes from the content of the loaded file.
@@ -74,5 +78,14 @@ namespace IN
 		void BoneProcess(const aiScene* scene);
 
 		void UpdateSkeleton();
+
+		void AddAnimation(Animation& in_anim);
+
+		Animation* FindAnimation(std::string anim_to_find);
+
+		void PlayAnimation(Animation& anim, bool loop = false, bool reset_to_start = false);
+		void PlayAnimation(std::string name_anim);
+		
+		void StopAnimating();
 	};
 }

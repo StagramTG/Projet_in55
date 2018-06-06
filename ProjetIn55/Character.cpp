@@ -29,3 +29,14 @@ void IN::Character::render(ShaderProgram* shader)
 {
     mModel.render(shader);
 }
+
+void IN::Character::AddAnimation(Animation anim)
+{
+	mModel.AddAnimation(anim);
+}
+
+void IN::Character::Move(int input)
+{
+	if (input == 265)
+		mModel.PlayAnimation("Walk");
+}

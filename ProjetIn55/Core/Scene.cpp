@@ -3,6 +3,7 @@
 IN::Scene::Scene(std::string name)
 {
 	mName = name;
+	mRootNode = new Node();
 }
 
 IN::Scene::~Scene()
@@ -30,4 +31,19 @@ void IN::Scene::render(ShaderProgram* shader)
 std::string IN::Scene::getName()
 {
 	return mName;
+}
+
+void IN::Scene::move_camera(int input)
+{
+	mRootNode->move_camera(input);
+}
+
+void IN::Scene::move_camera(int x, int y)
+{
+	mRootNode->move_camera(x, y);
+}
+
+void IN::Scene::move_character(int input)
+{
+	mRootNode->move_character(input);
 }
