@@ -4,6 +4,7 @@ IN::Mesh::Mesh()
 {
 	vao = 0;
 	vbo = 0;
+	loaderSkeleton = new Skeleton();
 }
 
 IN::Mesh::~Mesh()
@@ -66,7 +67,7 @@ void IN::Mesh::render(ShaderProgram* shader)
 	glBindVertexArray(vao);
 
 	// Shader stuff ?
-	glUniformMatrix4fv(shader->getUniformLocation("gBones"), loaderSkeleton.m_boneMats.size(), GL_FALSE, glm::value_ptr(loaderSkeleton.m_boneMats[0]));
+	glUniformMatrix4fv(shader->getUniformLocation("gBones"), loaderSkeleton->m_boneMats.size(), GL_FALSE, glm::value_ptr(loaderSkeleton->m_boneMats[0]));
 
 	// Draw elements
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
@@ -76,5 +77,10 @@ void IN::Mesh::render(ShaderProgram* shader)
 
 IN::Skeleton* IN::Mesh::GetLoaderSkeleton()
 {
-	return &loaderSkeleton;
+	return loaderSkeleton;
+}
+
+void IN::Mesh::SetLoaderSkeleton(IN::Skeleton* skeleton)
+{
+	loaderSkeleton = skeleton;
 }

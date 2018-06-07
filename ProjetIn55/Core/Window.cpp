@@ -130,7 +130,7 @@ namespace IN
 
 			float nowTime = (float)glfwGetTime();
 			if (nowTime > lastTime) {
-				GLOBALS::deltaTime = (nowTime - lastTime) / 1000;
+				GLOBALS::deltaTime = (nowTime - lastTime);
 				lastTime = nowTime;
 			}
 		}

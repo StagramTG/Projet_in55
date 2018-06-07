@@ -1,3 +1,5 @@
+#version 400
+
 uniform mat4 MMatrix;
 uniform mat4 VPMatrix;
 

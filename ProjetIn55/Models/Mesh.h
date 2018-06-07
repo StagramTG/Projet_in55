@@ -35,7 +35,7 @@ namespace IN
 		std::vector<GLuint> indices;
 		std::vector<Texture> textures;
 
-		Skeleton loaderSkeleton;
+		Skeleton* loaderSkeleton;
 
 	public:
 		Mesh();
@@ -45,5 +45,7 @@ namespace IN
 		virtual void render(ShaderProgram* shader) override;
 
 		Skeleton* GetLoaderSkeleton();
+
+		void SetLoaderSkeleton(IN::Skeleton* skeleton);
 	};
 }

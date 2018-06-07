@@ -40,12 +40,12 @@ namespace IN
 		std::vector<aiNode*> ai_nodes;
 		std::vector<aiNodeAnim*> ai_nodes_anim;
 
-		aiMatrix4x4 m_globalInverseTransform;
+		glm::mat4 m_globalInverseTransform;
 
 		std::vector<Bone> bones;
 
 		bool mAnim;
-		Skeleton mSkeleton;
+		Skeleton* mSkeleton;
 
 		std::vector<Animation> animations;
 		
@@ -55,9 +55,6 @@ namespace IN
 		 */
 		Mesh createMeshes(aiMesh* mesh, aiMaterial* material);
 
-		void recursiveNodeProcess(aiNode* node);
-		void AnimNodeProcess(const aiScene* scene);
-
 	public:
 		Model();
 		Model(std::string file);
@@ -66,6 +63,11 @@ namespace IN
 		bool create(std::string file);
 
 		virtual void render(ShaderProgram* shader) override;
+		virtual void update();
+
+		void recursiveNodeProcess(aiNode* node);
+
+		void AnimNodeProcess();
 
 		Bone* FindBone(std::string name);
 

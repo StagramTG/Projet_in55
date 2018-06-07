@@ -21,34 +21,40 @@ bool IN::Model::create(std::string file)
 {
 	// Load Model file with assimp
 	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(file,
+	importer.ReadFile(file,
 		aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
 
-	recursiveNodeProcess(scene->mRootNode);
-	AnimNodeProcess(scene);
-	m_globalInverseTransform = scene->mRootNode->mTransformation.Inverse();
+	mScene = importer.GetOrphanedScene();;
+
+	recursiveNodeProcess(mScene->mRootNode);
+	AnimNodeProcess();
+	m_globalInverseTransform = glm::inverse(AiToGLMMat4(mScene->mRootNode->mTransformation));
 
 	// Extract all meshes and build them
-	for (size_t i = 0; i < scene->mNumMeshes; ++i)
+	for (size_t i = 0; i < mScene->mNumMeshes; ++i)
 	{
-		aiMaterial* material = scene->mMaterials[scene->mMeshes[i]->mMaterialIndex];
+		aiMaterial* material = mScene->mMaterials[mScene->mMeshes[i]->mMaterialIndex];
 
 		// Create mesh and push in vector
-		Mesh m = createMeshes(scene->mMeshes[i], material);
+		Mesh m = createMeshes(mScene->mMeshes[i], material);
 		meshes.push_back(m);
 	}
 
 	// Extract bones
-	BoneProcess(scene);
+	BoneProcess(mScene);
 
 	if (meshes.size() != 0)
 	{
-		mSkeleton = *meshes.at(0).GetLoaderSkeleton();
+		mSkeleton = meshes.at(0).GetLoaderSkeleton();
+
+		for ( int i = 1; i < (signed)meshes.size(); ++i)
+		{
+			meshes.at(i).SetLoaderSkeleton(meshes.at(0).GetLoaderSkeleton());
+		}
 	}
 
-	mScene = scene;
 	// Free memory
-	//importer.FreeScene();
+	importer.FreeScene();
 	return true;
 }
 
@@ -59,6 +65,11 @@ void IN::Model::render(ShaderProgram* shader)
 	{
 		mesh.render(shader);
 	}
+}
+
+void IN::Model::update()
+{
+	UpdateSkeleton();
 }
 
 IN::Mesh IN::Model::createMeshes(aiMesh* mesh, aiMaterial* material)
@@ -165,14 +176,14 @@ void IN::Model::recursiveNodeProcess(aiNode* node)
 	}
 }
 
-void IN::Model::AnimNodeProcess(const aiScene* scene)
+void IN::Model::AnimNodeProcess()
 {
-	if (scene->mNumAnimations == 0)
+	if (mScene->mNumAnimations == 0)
 		return;
 
-	for (int i = 0; i < (signed)scene->mAnimations[0]->mNumChannels; ++i)
+	for (int i = 0; i < (signed)mScene->mAnimations[0]->mNumChannels; ++i)
 	{
-		ai_nodes_anim.push_back(scene->mAnimations[0]->mChannels[i]);
+		ai_nodes_anim.push_back(mScene->mAnimations[0]->mChannels[i]);
 	}
 }
 
@@ -252,7 +263,7 @@ void IN::Model::BoneProcess(const aiScene* scene)
 
 void IN::Model::UpdateSkeleton()
 {
-	mSkeleton.Update();
+	mSkeleton->Update();
 }
 
 void IN::Model::AddAnimation(Animation& in_anim)
@@ -274,7 +285,7 @@ IN::Animation* IN::Model::FindAnimation(std::string anim_to_find)
 
 void IN::Model::PlayAnimation(Animation& anim, bool loop, bool reset_to_start)
 {
-	mSkeleton.PlayAnimation(anim, loop, reset_to_start);
+	mSkeleton->PlayAnimation(anim, loop, reset_to_start);
 }
 
 void IN::Model::PlayAnimation(std::string name_anim)
@@ -283,7 +294,7 @@ void IN::Model::PlayAnimation(std::string name_anim)
 	{
 		if (anim.GetName() == name_anim)
 		{
-			mSkeleton.PlayAnimation(anim, false, false);
+			mSkeleton->PlayAnimation(anim, false, false);
 			break;
 		}
 	}
@@ -291,5 +302,5 @@ void IN::Model::PlayAnimation(std::string name_anim)
 
 void IN::Model::StopAnimating()
 {
-	mSkeleton.StopAnimating();
+	mSkeleton->StopAnimating();
 }

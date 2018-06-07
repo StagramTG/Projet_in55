@@ -22,7 +22,7 @@ bool IN::Character::create(std::string name, std::string modelFile)
 
 void IN::Character::update()
 {
-
+	mModel.update();
 }
 
 void IN::Character::render(ShaderProgram* shader)
