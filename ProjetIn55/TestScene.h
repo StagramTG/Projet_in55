@@ -29,7 +29,7 @@ public:
 		m_camera->setTarget(glm::vec3(0.f, 0.f, 0.f));
 
 		/* Load character model and setup */
-		character.create("Minion", "Assets/Models/Minion.dae");
+		character.create("Minion", "Assets/Models/Test.dae");
 
 		/* An animation*/
 		static IN::Animation Anim_Walk("Walk", IN::FramesToTime(glm::vec2(1, 45)), 2);
@@ -48,6 +48,9 @@ public:
 
 	virtual void render(IN::ShaderProgram* in_shader) override
 	{
+		GLuint loc = shader.getUniformLocation("MVPMatrix");
+		shader.setUniformMat4(loc, m_camera->getMatrix());
+
 		shader.use();
 		character.render(&shader);
 		IN::Scene::render(&shader);

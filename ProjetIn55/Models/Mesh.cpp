@@ -67,6 +67,15 @@ void IN::Mesh::render(ShaderProgram* shader)
 	glBindVertexArray(vao);
 
 	// Shader stuff ?
+	GLuint subVertexLoc = shader->getUniformLocation("coords0");
+	GLuint subFragmentLoc = shader->getUniformLocation("fColor");
+
+	shader->setUniformSubroutine(GL_VERTEX_SHADER, subVertexLoc);
+	shader->setUniformSubroutine(GL_FRAGMENT_SHADER, subFragmentLoc);
+
+	GLuint texture = shader->getUniformLocation("texture");
+	shader->setUniformInt(texture, 1);
+
 	glUniformMatrix4fv(shader->getUniformLocation("gBones"), loaderSkeleton->m_boneMats.size(), GL_FALSE, glm::value_ptr(loaderSkeleton->m_boneMats[0]));
 
 	// Draw elements
