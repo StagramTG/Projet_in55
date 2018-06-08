@@ -25,7 +25,6 @@ public:
 		settings.znear = 1.f;
 
 		m_camera = new IN::Camera(settings);
-		m_camera->setPosition(glm::vec3(-30.f, -30.f, -30.f));
 		m_camera->setTarget(glm::vec3(0.f, 0.f, 0.f));
 
 		/* Load character model and setup */
@@ -48,10 +47,11 @@ public:
 
 	virtual void render(IN::ShaderProgram* in_shader) override
 	{
+		shader.use();
+
 		GLuint loc = shader.getUniformLocation("MVPMatrix");
 		shader.setUniformMat4(loc, m_camera->getMatrix());
 
-		shader.use();
 		character.render(&shader);
 		IN::Scene::render(&shader);
 	}

@@ -66,13 +66,7 @@ void IN::Mesh::render(ShaderProgram* shader)
 	// Bind vao
 	glBindVertexArray(vao);
 
-	// Shader stuff ?
-	GLuint subVertexLoc = shader->getUniformLocation("coords0");
-	GLuint subFragmentLoc = shader->getUniformLocation("fColor");
-
-	shader->setUniformSubroutine(GL_VERTEX_SHADER, subVertexLoc);
-	shader->setUniformSubroutine(GL_FRAGMENT_SHADER, subFragmentLoc);
-
+	// Shader stuff
 	GLuint texture = shader->getUniformLocation("texture");
 	shader->setUniformInt(texture, 1);
 
