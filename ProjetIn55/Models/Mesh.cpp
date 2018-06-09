@@ -1,5 +1,7 @@
 #include "Mesh.h"
 
+#include <iostream>
+
 IN::Mesh::Mesh()
 {
 	vao = 0;
@@ -23,6 +25,11 @@ void IN::Mesh::create(
 	std::vector<GLuint> indices, 
 	std::vector<Texture> textures)
 {
+	// Keep data
+	mVertices = vertices;
+	mIndices = indices;
+	mTextures = textures;
+
 	// Create VAO
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
@@ -63,17 +70,25 @@ void IN::Mesh::create(
 
 void IN::Mesh::render(ShaderProgram* shader)
 {
-	// Bind vao
-	glBindVertexArray(vao);
-
 	// Shader stuff
 	GLuint texture = shader->getUniformLocation("texture");
 	shader->setUniformInt(texture, 1);
 
-	glUniformMatrix4fv(shader->getUniformLocation("gBones"), loaderSkeleton->m_boneMats.size(), GL_FALSE, glm::value_ptr(loaderSkeleton->m_boneMats[0]));
+	GLuint mvp = shader->getUniformLocation("gBones");
+	glUniformMatrix4fv(
+		mvp,
+		loaderSkeleton->m_boneMats.size(),
+		GL_FALSE,
+		glm::value_ptr(loaderSkeleton->m_boneMats[0])
+	);
+
+	std::cout << mIndices.size() << std::endl;
+
+	// Bind vao
+	glBindVertexArray(vao);
 
 	// Draw elements
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, 0);
 
 	glBindVertexArray(0);
 }

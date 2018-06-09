@@ -31,9 +31,9 @@ namespace IN
 		 */
 		GLuint ibo;
 
-		std::vector<Vertex> vertices;
-		std::vector<GLuint> indices;
-		std::vector<Texture> textures;
+		std::vector<Vertex> mVertices;
+		std::vector<GLuint> mIndices;
+		std::vector<Texture> mTextures;
 
 		Skeleton* loaderSkeleton;
 

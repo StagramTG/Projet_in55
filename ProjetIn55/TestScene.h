@@ -37,8 +37,6 @@ public:
 
 	virtual void update() override
 	{
-		std::cout << "Update scene" << std::endl;
-
 		m_camera->update();
 		character.update();
 
@@ -50,9 +48,11 @@ public:
 		shader.use();
 
 		GLuint loc = shader.getUniformLocation("MVPMatrix");
-		shader.setUniformMat4(loc, m_camera->getMatrix());
+		glm::mat4 model = glm::mat4(1.f);
+		shader.setUniformMat4(loc, m_camera->getMatrix() * model);
 
 		character.render(&shader);
+
 		IN::Scene::render(&shader);
 	}
 
