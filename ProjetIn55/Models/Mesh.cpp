@@ -30,6 +30,8 @@ void IN::Mesh::create(
 	mIndices = indices;
 	mTextures = textures;
 
+	std::cout << mVertices.size() << std::endl;
+
 	// Create VAO
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
@@ -81,8 +83,6 @@ void IN::Mesh::render(ShaderProgram* shader)
 		GL_FALSE,
 		glm::value_ptr(loaderSkeleton->m_boneMats[0])
 	);
-
-	std::cout << mIndices.size() << std::endl;
 
 	// Bind vao
 	glBindVertexArray(vao);

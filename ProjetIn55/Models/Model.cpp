@@ -24,7 +24,7 @@ bool IN::Model::create(std::string file)
 	importer.ReadFile(file,
 		aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
 
-	mScene = importer.GetOrphanedScene();;
+	mScene = importer.GetOrphanedScene();
 
 	recursiveNodeProcess(mScene->mRootNode);
 	AnimNodeProcess();
