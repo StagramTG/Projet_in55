@@ -35,17 +35,14 @@ namespace IN
 		std::vector<GLuint> mIndices;
 		std::vector<Texture> mTextures;
 
-		Skeleton* loaderSkeleton;
+		Skeleton loaderSkeleton;
 
 	public:
-		Mesh();
+		Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
 		~Mesh();
 
-		void create(std::vector<Vertex> vertices, std::vector<GLuint> indices, std::vector<Texture> textures);
 		virtual void render(ShaderProgram* shader) override;
 
 		Skeleton* GetLoaderSkeleton();
-
-		void SetLoaderSkeleton(IN::Skeleton* skeleton);
 	};
 }

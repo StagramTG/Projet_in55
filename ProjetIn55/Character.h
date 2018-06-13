@@ -23,6 +23,8 @@ namespace IN
         virtual void update() override;
 		virtual void render(ShaderProgram* shader) override;
 
+		void PlayAnimation(std::string name_anim);
+
 		void AddAnimation(IN::Animation);
 
 		void Move(int input);

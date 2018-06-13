@@ -25,14 +25,25 @@ public:
 		settings.znear = 1.f;
 
 		m_camera = new IN::Camera(settings);
+		m_camera->setPosition(glm::vec3(0.f, -10.f, 8.f));
 		m_camera->setTarget(glm::vec3(0.f, 0.f, 0.f));
 
 		/* Load character model and setup */
-		character.create("Minion", "Assets/Models/Test.dae");
+		character.create("Minion", "Assets/Models/Minion.dae");
 
-		/* An animation*/
-		static IN::Animation Anim_Walk("Walk", IN::FramesToTime(glm::vec2(1, 45)), 2);
+		/*static IN::Animation Anim_Test_Walk("Walk", IN::FramesToTime(glm::vec2(1, 45)), 2);
+		character.AddAnimation(Anim_Test_Walk);*/
+
+		/* Add animations*/
+		static IN::Animation Anim_Walk("Walk", IN::FramesToTime(glm::vec2(50, 150)), 3);
 		character.AddAnimation(Anim_Walk);
+
+		static IN::Animation Anim_Jump("Jump", IN::FramesToTime(glm::vec2(0, 50)), 1);
+		character.AddAnimation(Anim_Jump);
+
+		static IN::Animation Anim_Run("Run", IN::FramesToTime(glm::vec2(150, 250)), 2);
+		character.AddAnimation(Anim_Run);
+		//Start and end frames (or times) to update according the values defined in Blender for each action
 	}
 
 	virtual void update() override

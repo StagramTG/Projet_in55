@@ -231,8 +231,10 @@ namespace IN
 				}
 				else
 				{
-					glm::mat4 concatenated_transformation = (m_bones.at(i).GetParentTransforms() * AiToGLMMat4(m_bones.at(i).GetNode()->mTransformation));
-					m_boneMats.push_back(m_globalInverseTransform * concatenated_transformation * m_bones.at(i).offset_matrix);
+					glm::mat4 node_transformation = AiToGLMMat4(m_bones.at(i).GetNode()->mTransformation);
+					glm::mat4 concatenated_transformation = (m_bones.at(i).GetParentTransforms() * node_transformation);
+					glm::mat4 matFinal = m_globalInverseTransform * concatenated_transformation * m_bones.at(i).offset_matrix;
+					m_boneMats.push_back(matFinal);
 				}
 			}
 		}

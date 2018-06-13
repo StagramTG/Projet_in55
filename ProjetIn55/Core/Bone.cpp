@@ -33,6 +33,7 @@ glm::mat4 IN::Bone::GetParentTransforms()
 	while (b != nullptr)
 	{
 		glm::mat4 tmp_mat = AiToGLMMat4(b->node->mTransformation);
+
 		mats.push_back(tmp_mat);
 
 		b = b->parent_bone;

@@ -33,7 +33,7 @@ namespace IN
 	class Model: public Renderable
 	{
 	private:
-		std::vector<Mesh> meshes;
+		std::vector<Mesh*> meshes;
 
 		const aiScene* mScene;
 
@@ -53,7 +53,7 @@ namespace IN
 		 * Method to create all meshes from the content of the loaded file.
 		 * These Meshes compose the model.
 		 */
-		Mesh createMeshes(aiMesh* mesh, aiMaterial* material);
+		Mesh* createMeshes(aiMesh* mesh, aiMaterial* material);
 
 	public:
 		Model();
@@ -89,5 +89,6 @@ namespace IN
 		void PlayAnimation(std::string name_anim);
 		
 		void StopAnimating();
+
 	};
 }

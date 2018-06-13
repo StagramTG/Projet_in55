@@ -36,7 +36,7 @@ bool IN::Model::create(std::string file)
 		aiMaterial* material = mScene->mMaterials[mScene->mMeshes[i]->mMaterialIndex];
 
 		// Create mesh and push in vector
-		Mesh m = createMeshes(mScene->mMeshes[i], material);
+		Mesh* m = createMeshes(mScene->mMeshes[i], material);
 		meshes.push_back(m);
 	}
 
@@ -45,12 +45,7 @@ bool IN::Model::create(std::string file)
 
 	if (meshes.size() != 0)
 	{
-		mSkeleton = meshes.at(0).GetLoaderSkeleton();
-
-		for ( int i = 1; i < (signed)meshes.size(); ++i)
-		{
-			meshes.at(i).SetLoaderSkeleton(meshes.at(0).GetLoaderSkeleton());
-		}
+		mSkeleton = meshes.at(0)->GetLoaderSkeleton();
 	}
 
 	// Free memory
@@ -60,10 +55,17 @@ bool IN::Model::create(std::string file)
 
 void IN::Model::render(ShaderProgram* shader)
 {
-	UpdateSkeleton();
-	for (Mesh mesh : meshes)
+	/*GLuint bone = shader->getUniformLocation("gBones");
+	glUniformMatrix4fv(
+		bone,
+		mSkeleton->m_boneMats.size(),
+		GL_FALSE,
+		glm::value_ptr(mSkeleton->m_boneMats[0])
+	);*/
+
+	for (size_t i = 0; i<meshes.size(); ++i)
 	{
-		mesh.render(shader);
+		meshes.at(i)->render(shader);
 	}
 }
 
@@ -72,7 +74,7 @@ void IN::Model::update()
 	UpdateSkeleton();
 }
 
-IN::Mesh IN::Model::createMeshes(aiMesh* mesh, aiMaterial* material)
+IN::Mesh* IN::Model::createMeshes(aiMesh* mesh, aiMaterial* material)
 {
 	std::vector<Vertex> vertices;
 	std::vector<GLuint> indices;
@@ -97,6 +99,16 @@ IN::Mesh IN::Model::createMeshes(aiMesh* mesh, aiMaterial* material)
 			aiVector3D tex = mesh->mTextureCoords[0][i];
 			vertex.uv = glm::vec2(tex.x, tex.y);
 		}
+
+		vertex.weight[0] = 0;
+		vertex.weight[1] = 0;
+		vertex.weight[2] = 0;
+		vertex.weight[3] = 0;
+
+		vertex.id[0] = 0;
+		vertex.id[1] = 0;
+		vertex.id[2] = 0;
+		vertex.id[3] = 0;
 
 		// Push the vertex in vector
 		vertices.push_back(vertex);
@@ -131,6 +143,11 @@ IN::Mesh IN::Model::createMeshes(aiMesh* mesh, aiMaterial* material)
 			}
 		}
 	}
+	else
+	{
+		Texture texture;
+		textures.push_back(texture);
+	}
 
 	// Extract Bone IDs and Weights
 	int boneArraysSize = mesh->mNumVertices*WEIGHTS_PER_VERTEX;
@@ -159,11 +176,7 @@ IN::Mesh IN::Model::createMeshes(aiMesh* mesh, aiMaterial* material)
 		}
 	}
 
-
-	// Create the mesh
-	Mesh newMesh;
-	newMesh.create(vertices, indices, textures);
-	return newMesh;
+	return (new Mesh(vertices, indices, textures));
 }
 
 void IN::Model::recursiveNodeProcess(aiNode* node)
@@ -236,7 +249,7 @@ void IN::Model::BoneProcess(const aiScene* scene)
 			std::string b_name = scene->mMeshes[i]->mBones[j]->mName.data;
 			glm::mat4 b_mat = glm::transpose(AiToGLMMat4(scene->mMeshes[i]->mBones[j]->mOffsetMatrix));
 
-			Bone bone(&meshes.at(i), i, b_name, b_mat);
+			Bone bone(meshes.at(i), i, b_name, b_mat);
 
 			bone.SetNode(FindAiNode(b_name));
 			bone.SetAnimNode(FindAiNodeAnim(b_name));
@@ -257,7 +270,7 @@ void IN::Model::BoneProcess(const aiScene* scene)
 
 	if (meshes.size() > 0)
 	{
-		meshes.at(0).GetLoaderSkeleton()->Init(bones, m_globalInverseTransform);
+		meshes.at(0)->GetLoaderSkeleton()->Init(bones, m_globalInverseTransform);
 	}
 }
 
@@ -294,7 +307,7 @@ void IN::Model::PlayAnimation(std::string name_anim)
 	{
 		if (anim.GetName() == name_anim)
 		{
-			mSkeleton->PlayAnimation(anim, false, false);
+			mSkeleton->PlayAnimation(anim, true, true);
 			break;
 		}
 	}

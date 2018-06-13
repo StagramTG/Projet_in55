@@ -8,13 +8,13 @@ namespace IN
 {
 	static float TimeToFrame(float time)
 	{
-		float frame = 0.041666666667f;
+		float frame = 1.0f / 24.0f;
 		return time / frame;
 	}
 
 	static glm::vec2 FramesToTime(glm::vec2 frames)
 	{
-		float frame = 0.041666666667f;
+		float frame = 1.0f / 24.0f;
 		return frames * frame;
 	}
 

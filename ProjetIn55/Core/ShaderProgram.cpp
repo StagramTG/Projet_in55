@@ -158,4 +158,9 @@ namespace IN
 		glUniform3f(location, value.x, value.y, value.z);
 	}
 
+	GLuint ShaderProgram::getId()
+	{
+		return m_id;
+	}
+
 }

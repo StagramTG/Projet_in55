@@ -35,5 +35,7 @@ namespace IN
 		 * Unbind texture
 		 */
 		void unbind();
+
+		GLuint getId();
 	};
 }
