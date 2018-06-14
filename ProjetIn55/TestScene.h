@@ -38,7 +38,7 @@ public:
 		static IN::Animation Anim_Walk("Walk", IN::FramesToTime(glm::vec2(50, 150)), 3);
 		character.AddAnimation(Anim_Walk);
 
-		static IN::Animation Anim_Jump("Jump", IN::FramesToTime(glm::vec2(0, 50)), 1);
+		static IN::Animation Anim_Jump("Jump", IN::FramesToTime(glm::vec2(2, 50)), 1);
 		character.AddAnimation(Anim_Jump);
 
 		static IN::Animation Anim_Run("Run", IN::FramesToTime(glm::vec2(150, 250)), 2);
@@ -61,6 +61,8 @@ public:
 		GLuint loc = shader.getUniformLocation("MVPMatrix");
 		glm::mat4 model = glm::mat4(1.f);
 		shader.setUniformMat4(loc, m_camera->getMatrix() * model);
+
+		glUseProgram(0);
 
 		character.render(&shader);
 

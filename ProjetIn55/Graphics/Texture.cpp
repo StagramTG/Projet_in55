@@ -14,7 +14,7 @@ IN::Texture::~Texture()
 bool IN::Texture::loadFromFile(std::string file)
 {
     // Load texture from file
-    FIBITMAP* bitmap = FreeImage_Load(FreeImage_GetFileType(file.c_str(),0), file.c_str());
+    FIBITMAP* bitmap = FreeImage_Load(FIF_PNG, file.c_str());
     if(!bitmap)
     {
         return false;
@@ -35,14 +35,15 @@ bool IN::Texture::loadFromFile(std::string file)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    FreeImage_Unload(bitmap);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	FreeImage_Unload(bitmap);
 
     return true;
 }
 
-void IN::Texture::bind(GLuint index)
+void IN::Texture::bind()
 {
-    glActiveTexture(GL_TEXTURE0 + index);
     glBindTexture(GL_TEXTURE_2D, id);
 }
 

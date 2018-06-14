@@ -234,15 +234,6 @@ namespace IN
 					glm::mat4 node_transformation = AiToGLMMat4(m_bones.at(i).GetNode()->mTransformation);
 					glm::mat4 parents_trs = m_bones.at(i).GetParentTransforms();
 					glm::mat4 off_m = m_bones.at(i).offset_matrix;
-					/*for (int i = 0; i < 4; ++i)
-					{
-						for (int j = 0; j < 4; ++j)
-						{
-							node_transformation[i][j] = (float)round(node_transformation[i][j] );
-							parents_trs[i][j] = (float)round(parents_trs[i][j]) ;
-							off_m[i][j] = (float)round(off_m[i][j]);
-						}
-					}*/
 					glm::mat4 concatenated_transformation = (parents_trs * node_transformation);
 					glm::mat4 matFinal = m_globalInverseTransform * concatenated_transformation * off_m;
 					m_boneMats.push_back(matFinal);

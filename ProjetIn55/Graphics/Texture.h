@@ -29,7 +29,7 @@ namespace IN
 		/**
 		 * Bind the texture to be used
 		 */
-		void bind(GLuint index);
+		void bind();
 
 		/**
 		 * Unbind texture

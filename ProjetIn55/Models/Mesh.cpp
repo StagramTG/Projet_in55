@@ -55,6 +55,7 @@ IN::Mesh::~Mesh()
 void IN::Mesh::render(ShaderProgram* shader)
 {
 
+	glUseProgram(shader->getId());
 
 	glBindVertexArray(vao);
 
@@ -62,6 +63,8 @@ void IN::Mesh::render(ShaderProgram* shader)
 	GLint UV = glGetAttribLocation(shader->getId(), "UV");
 	GLint weight = glGetAttribLocation(shader->getId(), "weight");
 	GLint ids = glGetAttribLocation(shader->getId(), "ids");
+
+	glEnable(GL_TEXTURE_2D);
 
 	if (loaderSkeleton.m_boneMats.size() > 0)
 	{
@@ -80,8 +83,9 @@ void IN::Mesh::render(ShaderProgram* shader)
 		
 		if (mTextures.size() > 0)
 		{
-			mTextures.at(0).loadFromFile("./Assets/Models/textures/uv_minion.jpg");
-			glUniform1i(glGetUniformLocation(shader->getId(), "texture"), 0);
+			mTextures.at(0).loadFromFile("./Assets/Models/textures/uv_minion.png");
+			mTextures.at(0).bind();
+			//glUniform1i(glGetUniformLocation(shader->getId(), "texture"), 0);
 		}
 	}
 
@@ -102,12 +106,21 @@ void IN::Mesh::render(ShaderProgram* shader)
 
 	glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, 0);
 
+	if (mTextures.size() > 0)
+	{
+		mTextures.at(0).unbind();
+	}
+
+	glDisable(GL_TEXTURE_2D);
+
 	glDisableVertexAttribArray(vertex);
 	glDisableVertexAttribArray(UV);
 	glDisableVertexAttribArray(weight);
 	glDisableVertexAttribArray(ids);
 
 	glBindVertexArray(0);
+
+	glUseProgram(0);
 }
 
 IN::Skeleton* IN::Mesh::GetLoaderSkeleton()
