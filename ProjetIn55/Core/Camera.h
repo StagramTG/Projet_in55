@@ -1,6 +1,9 @@
 #pragma once
 
 #include <glm\gtc\matrix_transform.hpp>
+#include <glm\gtc\quaternion.hpp>
+#include <glm\gtx\quaternion.hpp>
+
 #include "CameraSettings.h"
 
 namespace IN
@@ -12,6 +15,8 @@ namespace IN
 
 		glm::mat4 m_view;
 		glm::mat4 m_projection;
+		glm::mat4 m_model;
+
 
 	public:
 		Camera();
