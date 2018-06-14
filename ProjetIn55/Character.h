@@ -12,6 +12,7 @@ namespace IN
     {
     private:
         Model mModel;
+		Texture texture;
 
     public:
         Character();

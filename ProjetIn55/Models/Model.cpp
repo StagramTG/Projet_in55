@@ -1,4 +1,5 @@
 #include "Model.h"
+#include <iostream>
 
 int WEIGHTS_PER_VERTEX = 4;
 
@@ -22,7 +23,7 @@ bool IN::Model::create(std::string file)
 	// Load Model file with assimp
 	Assimp::Importer importer;
 	importer.ReadFile(file,
-		aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
+		aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_JoinIdenticalVertices);
 
 	mScene = importer.GetOrphanedScene();
 
@@ -124,6 +125,7 @@ IN::Mesh* IN::Model::createMeshes(aiMesh* mesh, aiMaterial* material)
 
 	// Extract textures
 	size_t textureCount = material->GetTextureCount(aiTextureType_DIFFUSE);
+
 	if (textureCount > 0)
 	{
 		for (size_t t = 0; t < textureCount; ++t)
@@ -132,7 +134,7 @@ IN::Mesh* IN::Model::createMeshes(aiMesh* mesh, aiMaterial* material)
 
 			aiString texturePath;
 			material->GetTexture(aiTextureType_DIFFUSE, t, &texturePath);
-
+			
 			if (!texture.loadFromFile(texturePath.C_Str()))
 			{
 				// TODO: Put log in case of error

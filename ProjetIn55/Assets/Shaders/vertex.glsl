@@ -2,10 +2,10 @@
 
 uniform mat4 MVPMatrix;
 
+layout(location=0) in vec3 vertex;
 layout(location=1) in vec2 UV;
-layout(location=2) in vec3 vertex;
-layout(location=3) in vec4 weight;
-layout(location=4) in ivec4 ids;
+layout(location=2) in vec4 weight;
+layout(location=3) in ivec4 ids;
 
 const int MAX_BONES = 100;
 uniform mat4 gBones[MAX_BONES];

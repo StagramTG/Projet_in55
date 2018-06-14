@@ -8,6 +8,8 @@ IN::Character::Character()
 IN::Character::Character(std::string name, std::string modelFile): IN::Node(name)
 {
     mModel.create(modelFile);
+
+	if (!texture.loadFromFile("./Assets/Models/textures/uv_minion.png")) {}
 }
 
 IN::Character::~Character()
@@ -17,6 +19,8 @@ IN::Character::~Character()
 
 bool IN::Character::create(std::string name, std::string modelFile)
 {
+	texture.loadFromFile("./Assets/Models/textures/uv_minion.png");
+
     return mModel.create(modelFile);
 }
 
@@ -27,7 +31,12 @@ void IN::Character::update()
 
 void IN::Character::render(ShaderProgram* shader)
 {
+	texture.bind();
+	shader->setUniformInt(shader->getUniformLocation("texture"), texture.getId());
+
     mModel.render(shader);
+
+	texture.unbind();
 }
 
 void IN::Character::PlayAnimation(std::string name_anim)

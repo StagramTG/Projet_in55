@@ -18,8 +18,6 @@ IN::Mesh::Mesh(
 		mTextures.push_back(texture);
 	}
 
-	std::cout << mVertices.size() << std::endl;
-
 	// Create VAO
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
@@ -28,6 +26,18 @@ IN::Mesh::Mesh(
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * mVertices.size(), &mVertices[0], GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
+
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
+
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_TRUE, sizeof(Vertex), (void*)offsetof(Vertex, weight));
+
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(3, 4, GL_INT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, id));
 
 	// Create IBO + bind + push data
 	glGenBuffers(1, &ibo);
@@ -59,10 +69,10 @@ void IN::Mesh::render(ShaderProgram* shader)
 
 	glBindVertexArray(vao);
 
-	GLint vertex = glGetAttribLocation(shader->getId(), "vertex");
-	GLint UV = glGetAttribLocation(shader->getId(), "UV");
-	GLint weight = glGetAttribLocation(shader->getId(), "weight");
-	GLint ids = glGetAttribLocation(shader->getId(), "ids");
+	//GLint vertex = glGetAttribLocation(shader->getId(), "vertex");
+	//GLint UV = glGetAttribLocation(shader->getId(), "UV");
+	//GLint weight = glGetAttribLocation(shader->getId(), "weight");
+	//GLint ids = glGetAttribLocation(shader->getId(), "ids");
 
 	glEnable(GL_TEXTURE_2D);
 
@@ -83,8 +93,8 @@ void IN::Mesh::render(ShaderProgram* shader)
 		
 		if (mTextures.size() > 0)
 		{
-			mTextures.at(0).loadFromFile("./Assets/Models/textures/uv_minion.png");
-			mTextures.at(0).bind();
+			//mTextures.at(0).loadFromFile("./Assets/Models/textures/uv_minion.png");
+			//mTextures.at(0).bind();
 			//glUniform1i(glGetUniformLocation(shader->getId(), "texture"), 0);
 		}
 	}
@@ -92,31 +102,9 @@ void IN::Mesh::render(ShaderProgram* shader)
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 
-	glEnableVertexAttribArray(vertex);
-	glVertexAttribPointer(vertex, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
-
-	glEnableVertexAttribArray(UV);
-	glVertexAttribPointer(UV, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
-
-	glEnableVertexAttribArray(weight);
-	glVertexAttribPointer(weight, 4, GL_FLOAT, GL_TRUE, sizeof(Vertex), (void*)offsetof(Vertex, weight));
-
-	glEnableVertexAttribArray(ids);
-	glVertexAttribPointer(ids, 4, GL_INT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, id));
-
 	glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, 0);
 
-	if (mTextures.size() > 0)
-	{
-		mTextures.at(0).unbind();
-	}
-
 	glDisable(GL_TEXTURE_2D);
-
-	glDisableVertexAttribArray(vertex);
-	glDisableVertexAttribArray(UV);
-	glDisableVertexAttribArray(weight);
-	glDisableVertexAttribArray(ids);
 
 	glBindVertexArray(0);
 
