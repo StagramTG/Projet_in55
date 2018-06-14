@@ -25,7 +25,7 @@ public:
 		settings.znear = 1.f;
 
 		m_camera = new IN::Camera(settings);
-		m_camera->setPosition(glm::vec3(0.f, -10.f, 8.f));
+		m_camera->setPosition(glm::vec3(2.f, 4.f, 15.f));
 		m_camera->setTarget(glm::vec3(0.f, 0.f, 0.f));
 
 		/* Load character model and setup */

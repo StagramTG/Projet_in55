@@ -12,6 +12,12 @@ IN::Mesh::Mesh(
 	mIndices = indices;
 	mTextures = textures;
 
+	if (mTextures.size() == 0)
+	{
+		Texture texture;
+		mTextures.push_back(texture);
+	}
+
 	std::cout << mVertices.size() << std::endl;
 
 	// Create VAO
@@ -52,14 +58,18 @@ void IN::Mesh::render(ShaderProgram* shader)
 
 	glBindVertexArray(vao);
 
-	int vertex = glGetAttribLocation(shader->getId(), "vertex");
-	int normal = glGetAttribLocation(shader->getId(), "normal");
-	int UV = glGetAttribLocation(shader->getId(), "UV");
-	int weight = glGetAttribLocation(shader->getId(), "weight");
-	int ids = glGetAttribLocation(shader->getId(), "ids");
+	GLint vertex = glGetAttribLocation(shader->getId(), "vertex");
+	GLint UV = glGetAttribLocation(shader->getId(), "UV");
+	GLint weight = glGetAttribLocation(shader->getId(), "weight");
+	GLint ids = glGetAttribLocation(shader->getId(), "ids");
 
 	if (loaderSkeleton.m_boneMats.size() > 0)
 	{
+		/*loaderSkeleton.m_boneMats.clear();
+		for (int i = 0; i < 100; ++i)
+		{
+			loaderSkeleton.m_boneMats.push_back(glm::mat4(1.0));
+		}*/
 		GLuint bone = shader->getUniformLocation("gBones");
 		glUniformMatrix4fv(
 			bone,
@@ -81,9 +91,6 @@ void IN::Mesh::render(ShaderProgram* shader)
 	glEnableVertexAttribArray(vertex);
 	glVertexAttribPointer(vertex, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
 
-	glEnableVertexAttribArray(normal);
-	glVertexAttribPointer(normal, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
-
 	glEnableVertexAttribArray(UV);
 	glVertexAttribPointer(UV, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
 
@@ -96,7 +103,6 @@ void IN::Mesh::render(ShaderProgram* shader)
 	glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, 0);
 
 	glDisableVertexAttribArray(vertex);
-	glDisableVertexAttribArray(normal);
 	glDisableVertexAttribArray(UV);
 	glDisableVertexAttribArray(weight);
 	glDisableVertexAttribArray(ids);

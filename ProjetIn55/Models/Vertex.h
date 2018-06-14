@@ -21,6 +21,6 @@ namespace IN
 		glm::vec2 uv;
 
 		float weight[4];
-		unsigned int id[4];
+		int id[4];
 	};
 }

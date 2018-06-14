@@ -105,10 +105,10 @@ IN::Mesh* IN::Model::createMeshes(aiMesh* mesh, aiMaterial* material)
 		vertex.weight[2] = 0;
 		vertex.weight[3] = 0;
 
-		vertex.id[0] = 0;
-		vertex.id[1] = 0;
-		vertex.id[2] = 0;
-		vertex.id[3] = 0;
+		vertex.id[0] = -1;
+		vertex.id[1] = -1;
+		vertex.id[2] = -1;
+		vertex.id[3] = -1;
 
 		// Push the vertex in vector
 		vertices.push_back(vertex);
@@ -142,11 +142,6 @@ IN::Mesh* IN::Model::createMeshes(aiMesh* mesh, aiMaterial* material)
 				textures.push_back(texture);
 			}
 		}
-	}
-	else
-	{
-		Texture texture;
-		textures.push_back(texture);
 	}
 
 	// Extract Bone IDs and Weights
@@ -307,7 +302,7 @@ void IN::Model::PlayAnimation(std::string name_anim)
 	{
 		if (anim.GetName() == name_anim)
 		{
-			mSkeleton->PlayAnimation(anim, true, true);
+			mSkeleton->PlayAnimation(anim, false, true);
 			break;
 		}
 	}
