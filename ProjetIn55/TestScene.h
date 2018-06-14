@@ -59,7 +59,9 @@ public:
 		shader.use();
 
 		GLuint loc = shader.getUniformLocation("MVPMatrix");
-		glm::mat4 model = glm::mat4(1.f);
+		glm::mat4 model = glm::mat4();
+		model = glm::rotate(model, -90.f, glm::vec3(1, 0, 0));
+
 		shader.setUniformMat4(loc, m_camera->getMatrix() * model);
 
 		glUseProgram(0);

@@ -21,7 +21,7 @@ void main ()
           BMatrix += gBones[ids[2]] * weight[2];
           BMatrix += gBones[ids[3]] * weight[3];
 	
-    gl_Position = MVPMatrix * BMatrix * (vec4(vertex,1.0));
+    gl_Position = MVPMatrix * (vec4(vertex,1.0));
 	
 	we = weight;
  
