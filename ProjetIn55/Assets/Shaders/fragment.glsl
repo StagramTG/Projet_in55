@@ -1,8 +1,10 @@
+#version 330
+
 uniform sampler2D texture;
 
 in vec2 coords0;
-in vec4 we;
-in vec4 id;
+//in vec4 we;
+//in vec4 id;
 
 out vec4 fColor;
 
