@@ -23,6 +23,7 @@ namespace IN
 		GLFWwindow * mWindow;
 
 		float lastTime = 0;
+		bool clicMouse = 0;
 		
 		bool initContext();
 		bool initWindow(int w, int h, const char* t);
@@ -76,6 +77,7 @@ namespace IN
 
 		void ButtonPressed(GLFWwindow* window, int key, int scancode, int action, int mods);
 		void CursorMoved(GLFWwindow* window, double xpos, double ypos);
+		void MouseClic(GLFWwindow* window, int button, int action, int mods);
 	};
 }
 #endif

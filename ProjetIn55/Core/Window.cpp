@@ -110,7 +110,23 @@ namespace IN
 		std::vector<double> currentMousePosition = std::vector<double>({ xpos, ypos });
 		std::vector<double> deltaPosition = std::vector<double>({ xpos - lastMousePosition.at(0), ypos - lastMousePosition.at(1) });
 		lastMousePosition = currentMousePosition;
-		mCurrentScene->move_camera(deltaPosition.at(0), deltaPosition.at(1));
+		if (clicMouse == 1)
+		{
+			mCurrentScene->move_camera((int)deltaPosition.at(0), (int)deltaPosition.at(1));
+		}
+	}
+
+	void IN::Window::MouseClic(GLFWwindow* window, int button, int action, int mods)
+	{
+		if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+		{
+			clicMouse = 1;
+		}
+		else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
+		{
+			clicMouse = 0;
+		}
+			
 	}
 
 	void Window::run()
@@ -182,6 +198,12 @@ namespace IN
 			static_cast<Window*>(glfwGetWindowUserPointer(window))->CursorMoved(window, x, y);
 		};
 		glfwSetCursorPosCallback(mWindow, MouseEvent);
+
+		auto mouse_button_callback = [](GLFWwindow* window, int button, int action, int mods)
+		{
+			static_cast<Window*>(glfwGetWindowUserPointer(window))->MouseClic(window, button, action, mods);
+		};
+		glfwSetMouseButtonCallback(mWindow, mouse_button_callback);
 
 		lastMousePosition = std::vector<double>({ (double)w / 2, (double)h / 2 });
 
