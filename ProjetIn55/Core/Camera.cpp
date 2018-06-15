@@ -82,20 +82,30 @@ namespace IN
 
 	void Camera::move(int input)
 	{
-		//stop la rotation (touche s)
-		if (input == 83)
+		//stop la rotation (touche f)
+		if (input == 70)
 		{
-			m_settings.theta = 0.f;
+			m_settings.fact = 0.f;
 		}
 		//rotation vers la gauche (touche q)
 		else if (input == 65)
 		{
-			m_settings.theta = -0.2f * m_settings.sensitivity * m_settings.speed;
+			m_settings.fact = -0.2f * m_settings.sensitivity * m_settings.speed;
 		}
 		//rotation vers la droite (touche d)
 		else if (input == 68)
 		{
-			m_settings.theta = 0.2f * m_settings.sensitivity * m_settings.speed;
+			m_settings.fact = 0.2f * m_settings.sensitivity * m_settings.speed;
+		}
+		// Avancée de la caméra (touche z)
+		else if (input == 87)
+		{
+			m_settings.position += m_settings.orientation * m_settings.speed;
+		}
+		// Recul de la caméra (touche s)
+		else if (input == 83)
+		{
+			m_settings.position -= m_settings.orientation * m_settings.speed;
 		}
 
 
@@ -117,10 +127,9 @@ namespace IN
 
 	void Camera::move(int x, int y)
 	{
-		/*
 		//Mise à jour des angles
-		m_settings.phi += y * m_settings.sensitivity;
-		m_settings.theta += x * m_settings.sensitivity;
+		m_settings.phi -= y * m_settings.sensitivity;
+		m_settings.theta -= x * m_settings.sensitivity;
 
 
 		if (m_settings.phi > 89.0f)
@@ -131,13 +140,12 @@ namespace IN
 			
 		//Mise à jour orientation
 		updateCameraVect();
-		*/
 	}
 
 	void Camera::update()
 	{
 		//ralentis le mouvement de rotation horizontal
-		m_settings.theta *= 0.99f;
+		m_settings.fact *= 0.99f;
 
 		m_view = glm::lookAt(
 			m_settings.position,
@@ -152,7 +160,7 @@ namespace IN
 			m_settings.zfar
 		);
 
-		m_model = glm::rotate(m_model, m_settings.theta, glm::vec3(0.f, 1.f, 0.f));
+		m_model = glm::rotate(m_model, m_settings.fact, glm::vec3(0.f, 1.f, 0.f));
 	}
 
 	glm::mat4 Camera::getMatrix()

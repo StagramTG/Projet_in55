@@ -70,17 +70,7 @@ void IN::Mesh::render(ShaderProgram* shader)
 
 	glBindVertexArray(vao);
 
-	//GLint vertex = glGetAttribLocation(shader->getId(), "vertex");
-	//GLint UV = glGetAttribLocation(shader->getId(), "UV");
-	//GLint weight = glGetAttribLocation(shader->getId(), "weight");
-	//GLint ids = glGetAttribLocation(shader->getId(), "ids");
-
 	glEnable(GL_TEXTURE_2D);
-
-	if (loaderSkeleton.m_boneMats.size() > 0)
-	{
-		
-	}
 
 	GLuint bone = shader->getUniformLocation("gBones");
 	glUniformMatrix4fv(

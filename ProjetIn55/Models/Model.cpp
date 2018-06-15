@@ -56,14 +56,6 @@ bool IN::Model::create(std::string file)
 
 void IN::Model::render(ShaderProgram* shader)
 {
-	/*GLuint bone = shader->getUniformLocation("gBones");
-	glUniformMatrix4fv(
-		bone,
-		mSkeleton->m_boneMats.size(),
-		GL_FALSE,
-		glm::value_ptr(mSkeleton->m_boneMats[0])
-	);*/
-
 	for (size_t i = 0; i<meshes.size(); ++i)
 	{
 		meshes.at(i)->render(shader);

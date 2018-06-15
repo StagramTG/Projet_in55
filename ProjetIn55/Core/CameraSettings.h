@@ -15,6 +15,8 @@ namespace IN
 		float phi = 0.0f;
 		float theta = 0.0f;
 
+		float fact = 0.0f;
+
 		float sensitivity = 0.1f;
 		float speed = 2.5f;
 

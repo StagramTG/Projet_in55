@@ -90,7 +90,7 @@ namespace IN
 	void IN::Window::ButtonPressed(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
 		
-		if (action == GLFW_PRESS)
+		if (action == GLFW_PRESS || action == GLFW_REPEAT)
 		{
 			if (key == GLFW_KEY_ESCAPE)
 			{

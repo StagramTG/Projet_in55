@@ -231,26 +231,9 @@ namespace IN
 				}
 				else
 				{
-					glm::mat4 node_transformation = AiToGLMMat4(m_bones.at(i).GetNode()->mTransformation);
-					glm::mat4 parents_trs = m_bones.at(i).GetParentTransforms();
-					glm::mat4 off_m = m_bones.at(i).offset_matrix;
-					glm::mat4 concatenated_transformation = (parents_trs * node_transformation);
-					glm::mat4 matFinal = m_globalInverseTransform * concatenated_transformation * off_m;
-					m_boneMats.push_back(matFinal);
+					glm::mat4 concatenated_transformation = (m_bones.at(i).GetParentTransforms() * AiToGLMMat4(m_bones.at(i).GetNode()->mTransformation));
+					m_boneMats.push_back(m_globalInverseTransform * concatenated_transformation* m_bones.at(i).offset_matrix);
 				}
-			}
-		}
-
-		void ResetBoneMatsVector()
-		{
-			if (m_bones.size() == 0)
-				return;
-
-			m_boneMats.clear();
-
-			for (int i = 0; i < 100; ++i)
-			{
-				m_boneMats.push_back(glm::mat4(glm::vec4(1.0,0.0,0.0,0.0), glm::vec4(0.0, 0.0, -1.0, 0.0), glm::vec4(0.0, 1.0, 0.0, 0.0), glm::vec4(0.0, 0.0, 0.0, 1.0)));
 			}
 		}
 
@@ -260,7 +243,6 @@ namespace IN
 
 			if (!anim_play)
 			{
-				ResetBoneMatsVector();
 				return;
 			}
 			
