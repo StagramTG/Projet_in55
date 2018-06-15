@@ -84,15 +84,19 @@ namespace IN
 	{
 		//stop la rotation (touche s)
 		if (input == 83)
+		{
 			m_settings.theta = 0.f;
-
+		}
 		//rotation vers la gauche (touche q)
-		if (input == 65)
+		else if (input == 65)
+		{
 			m_settings.theta = -0.2f * m_settings.sensitivity * m_settings.speed;
-
+		}
 		//rotation vers la droite (touche d)
-		if (input == 68)
+		else if (input == 68)
+		{
 			m_settings.theta = 0.2f * m_settings.sensitivity * m_settings.speed;
+		}
 
 
 		// Avancée de la caméra (touche z)
@@ -149,7 +153,6 @@ namespace IN
 		);
 
 		m_model = glm::rotate(m_model, m_settings.theta, glm::vec3(0.f, 1.f, 0.f));
-
 	}
 
 	glm::mat4 Camera::getMatrix()

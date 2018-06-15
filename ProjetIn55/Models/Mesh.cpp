@@ -64,6 +64,7 @@ IN::Mesh::~Mesh()
 
 void IN::Mesh::render(ShaderProgram* shader)
 {
+	loaderSkeleton.UpdateBoneMatsVector();
 
 	glUseProgram(shader->getId());
 
@@ -78,26 +79,16 @@ void IN::Mesh::render(ShaderProgram* shader)
 
 	if (loaderSkeleton.m_boneMats.size() > 0)
 	{
-		/*loaderSkeleton.m_boneMats.clear();
-		for (int i = 0; i < 100; ++i)
-		{
-			loaderSkeleton.m_boneMats.push_back(glm::mat4(1.0));
-		}*/
-		GLuint bone = shader->getUniformLocation("gBones");
-		glUniformMatrix4fv(
-			bone,
-			loaderSkeleton.m_boneMats.size(),
-			GL_FALSE,
-			glm::value_ptr(loaderSkeleton.m_boneMats[0])
-		);
 		
-		if (mTextures.size() > 0)
-		{
-			//mTextures.at(0).loadFromFile("./Assets/Models/textures/uv_minion.png");
-			//mTextures.at(0).bind();
-			//glUniform1i(glGetUniformLocation(shader->getId(), "texture"), 0);
-		}
 	}
+
+	GLuint bone = shader->getUniformLocation("gBones");
+	glUniformMatrix4fv(
+		bone,
+		loaderSkeleton.m_boneMats.size(),
+		GL_FALSE,
+		&loaderSkeleton.m_boneMats[0][0][0]
+	);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
