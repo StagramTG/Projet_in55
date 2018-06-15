@@ -16,11 +16,11 @@ out vec4 we;
 void main ()
 {
 	mat4 BMatrix = gBones[ids[0]] * weight[0];
-          BMatrix += gBones[ids[1]] * weight[1];
-          BMatrix += gBones[ids[2]] * weight[2];
-          BMatrix += gBones[ids[3]] * weight[3];
+    BMatrix += gBones[ids[1]] * weight[1];
+    BMatrix += gBones[ids[2]] * weight[2];
+    BMatrix += gBones[ids[3]] * weight[3];
 	
-    gl_Position = MVPMatrix /* BMatrix */ * (vec4(vertex,1.0));
+    gl_Position = MVPMatrix * BMatrix * (vec4(vertex,1.0));
 	
 	we = weight;
  

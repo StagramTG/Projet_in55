@@ -34,10 +34,10 @@ IN::Mesh::Mesh(
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
 
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 4, GL_FLOAT, GL_TRUE, sizeof(Vertex), (void*)offsetof(Vertex, weight));
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, weight));
 
 	glEnableVertexAttribArray(3);
-	glVertexAttribPointer(3, 4, GL_INT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, id));
+	glVertexAttribIPointer(3, 4, GL_INT, sizeof(Vertex), (void*)offsetof(Vertex, id));
 
 	// Create IBO + bind + push data
 	glGenBuffers(1, &ibo);
