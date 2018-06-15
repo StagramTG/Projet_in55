@@ -31,9 +31,6 @@ public:
 		/* Load character model and setup */
 		character.create("Minion", "Assets/Models/Minion.dae");
 
-		/*static IN::Animation Anim_Test_Walk("Walk", IN::FramesToTime(glm::vec2(1, 45)), 2);
-		character.AddAnimation(Anim_Test_Walk);*/
-
 		/* Add animations*/
 		static IN::Animation Anim_Walk("Walk", IN::FramesToTime(glm::vec2(50, 150)), 3);
 		character.AddAnimation(Anim_Walk);
@@ -44,6 +41,10 @@ public:
 		static IN::Animation Anim_Run("Run", IN::FramesToTime(glm::vec2(150, 250)), 2);
 		character.AddAnimation(Anim_Run);
 		//Start and end frames (or times) to update according the values defined in Blender for each action
+
+		static IN::Animation Anim_Init("Init", IN::FramesToTime(glm::vec2(0, 1)), 2);
+		character.AddAnimation(Anim_Init);
+		character.PlayAnimation("Init");
 	}
 
 	virtual void update() override
